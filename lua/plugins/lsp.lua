@@ -4,11 +4,11 @@ return {
 		'neovim/nvim-lspconfig',
 		config = function()
 			-- Setup language servers.
+            -- Deprecated
 			local lspconfig = require('lspconfig')
 
-			-- Rust
-			lspconfig.rust_analyzer.setup {
-				-- Server-specific settings. See `:help lspconfig-setup`
+			-- Rust (using new vim.lsp.config API for Nvim 0.11+)
+			vim.lsp.config('rust_analyzer', {
 				settings = {
 					["rust-analyzer"] = {
 						cargo = {
@@ -26,69 +26,47 @@ return {
 						},
 					},
 				},
-			}
+			})
+			vim.lsp.enable('rust_analyzer')
 
-			-- Bash LSP
-			local configs = require 'lspconfig.configs'
-			if not configs.bash_lsp and vim.fn.executable('bash-language-server') == 1 then
-				configs.bash_lsp = {
-					default_config = {
-						cmd = { 'bash-language-server', 'start' },
-						filetypes = { 'sh' },
-						root_dir = require('lspconfig').util.find_git_ancestor,
-						init_options = {
-							settings = {
-								args = {}
-							}
-						}
+			-- Bash LSP (using new vim.lsp.config API for Nvim 0.11+)
+			if vim.fn.executable('bash-language-server') == 1 then
+				vim.lsp.config('bashls', {
+					cmd = { 'bash-language-server', 'start' },
+					filetypes = { 'sh' },
+					settings = {
+						args = {}
 					}
-				}
-			end
-			if configs.bash_lsp then
-				lspconfig.bash_lsp.setup {}
+				})
+				vim.lsp.enable('bashls')
 			end
 
-			-- Ruff for Python
-			local configs = require 'lspconfig.configs'
-			if not configs.ruff and vim.fn.executable('ruff') == 1 then
-				configs.ruff = {
-					default_config = {
-						cmd = { 'ruff', 'server' },
-						filetypes = { 'python' },
-						root_dir = require('lspconfig').util.find_git_ancestor,
-					}
-				}
-			end
-			if configs.ruff then
-				lspconfig.ruff.setup {}
+			-- Ruff for Python (using new vim.lsp.config API for Nvim 0.11+)
+			if vim.fn.executable('ruff') == 1 then
+				vim.lsp.config('ruff', {
+					cmd = { 'ruff', 'server' },
+					filetypes = { 'python' },
+				})
+				vim.lsp.enable('ruff')
 			end
 
-            -- Typescript and Javascript Language server
-            if not configs.tsserver and vim.fn.executable('typescript-language-server') == 1 then
-                configs.tsserver = {
-                    default_config = {
-                        cmd = { 'typescript-language-server', '--stdio' },
-                        filetypes = {
-                            'javascript',
-                            'javascriptreact',
-                            'javascript.jsx',
-                            'typescript',
-                            'typescriptreact',
-                            'typescript.tsx',
-                        },
-                        root_dir = lspconfig.util.root_pattern('package.json', 'tsconfig.json', '.git'),
-                        settings = {},
+            -- Typescript and Javascript Language server (using new vim.lsp.config API for Nvim 0.11+)
+            if vim.fn.executable('typescript-language-server') == 1 then
+                vim.lsp.config('tsserver', {
+                    cmd = { 'typescript-language-server', '--stdio' },
+                    filetypes = {
+                        'javascript',
+                        'javascriptreact',
+                        'javascript.jsx',
+                        'typescript',
+                        'typescriptreact',
+                        'typescript.tsx',
                     },
-                }
-            end
-
-            -- Setup tsserver
-            if configs.tsserver then
-                lspconfig.tsserver.setup {
                     on_attach = function(client, bufnr)
                         client.server_capabilities.documentFormattingProvider = false
                     end,
-                }
+                })
+                vim.lsp.enable('tsserver')
             end
 
             -- See `:help vim.diagnostic.*` for documentation on any of the below functions
