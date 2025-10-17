@@ -2,27 +2,35 @@ return {
     {
         'shaunsingh/nord.nvim'
     },
-    -- main color scheme
-	{
-		"wincent/base16-nvim",
-		lazy = false, -- load at start
-		priority = 1000, -- load first
-		config = function()
-			vim.cmd('colorscheme tokyo-night-dark')
-			vim.o.background = 'dark'
-			-- XXX: hi Normal ctermbg=NONE
-			-- Make comments more prominent -- they are important.
-			local bools = vim.api.nvim_get_hl(0, { name = 'Boolean' })
-			vim.api.nvim_set_hl(0, 'Comment', bools)
+    { 
+        "catppuccin/nvim", 
+        name = "catppuccin", 
+        priority = 1000,
+        config = function() 
+            vim.cmd('colorscheme catppuccin')
+	        vim.o.background = 'dark'
+	 		-- XXX: hi Normal ctermbg=NONE
+	 		-- Make comments more prominent -- they are important.
+	 		local bools = vim.api.nvim_get_hl(0, { name = 'Boolean'})
             -- Remove background (Not working in WSL)
-            vim.api.nvim_set_hl(0, "normal", { bg = "none" })
+            -- vim.api.nvim_set_hl(0, "normal", { bg = "none" })
             -- Uncomment if you want the floating window to be bg less
             -- vim.api.nvim_set_hl(0, "normalfloat", { bg = "none" })
-			-- Make it clearly visible which argument we're at.
-			local marked = vim.api.nvim_get_hl(0, { name = 'PMenu' })
-			vim.api.nvim_set_hl(0, 'LspSignatureActiveParameter', { fg = marked.fg, bg = marked.bg, ctermfg = marked.ctermfg, ctermbg = marked.ctermbg, bold = true })
-		end
-	},
+	 		-- Make it clearly visible which argument we're at.
+	 		local marked = vim.api.nvim_get_hl(0, { name = 'PMenu' })
+	 		vim.api.nvim_set_hl(0, 'LspSignatureActiveParameter', { fg = marked.fg, bg = marked.bg, ctermfg = marked.ctermfg, ctermbg = marked.ctermbg, bold = true })
+            -- Enable cursorline only for line number
+            vim.opt.cursorline = true
+            vim.opt.cursorlineopt = "number"
+            -- Remove background color
+            -- Optional: customize line number highlight
+            vim.api.nvim_set_hl(0, "CursorLineNr", { bg = "none",  fg = "#7aa2f7", bold = true })
+        end
+    },
+	-- 	config = function()
+    --         vim.cmd('colorscheme tokyodark')
+	-- 	end
+	-- },
 	-- nice bar at the bottom
 	{
 		'itchyny/lightline.vim',
