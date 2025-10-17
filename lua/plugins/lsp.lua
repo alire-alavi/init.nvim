@@ -41,6 +41,16 @@ return {
 				vim.lsp.enable('bashls')
 			end
 
+            -- gopls for Go Programming Lanuage
+            if vim.fn.executable('gopls') == 1 then
+                vim.lsp.config('gopls', {
+                    cmd = { 'gopls' },
+                    filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
+                })
+                vim.lsp.enable('gopls')
+
+            end
+
 			-- Ruff for Python (using new vim.lsp.config API for Nvim 0.11+)
 			if vim.fn.executable('ruff') == 1 then
 				vim.lsp.config('ruff', {
