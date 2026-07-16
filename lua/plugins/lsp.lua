@@ -1,4 +1,7 @@
 return {
+    {
+        "prisma/vim-prisma",
+    },
 	-- LSP
 	{
 		'neovim/nvim-lspconfig',
@@ -7,7 +10,14 @@ return {
             -- Deprecated
 			local lspconfig = require('lspconfig')
 
-			-- Rust (using new vim.lsp.config API for Nvim 0.11+)
+            -- Prisma formatting and LSP
+            vim.lsp.config('prismals', {
+                cmd = { 'prisma-language-server', '--stdio' },
+                filetypes = { 'prisma', 'schema' },
+            })
+            vim.lsp.enable('prismals')
+
+			-- -- Rust (using new vim.lsp.config API for Nvim 0.11+)
 			vim.lsp.config('rust_analyzer', {
 				settings = {
 					["rust-analyzer"] = {
