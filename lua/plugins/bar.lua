@@ -2,12 +2,15 @@ return {
     {
         'shaunsingh/nord.nvim'
     },
+    {
+        "vague-theme/vague.nvim",
+    },
     { 
         "catppuccin/nvim", 
         name = "catppuccin", 
         priority = 1000,
         config = function() 
-            vim.cmd('colorscheme catppuccin')
+            vim.cmd("colorscheme vague")
 	        vim.o.background = 'dark'
 	 		-- XXX: hi Normal ctermbg=NONE
 	 		-- Make comments more prominent -- they are important.
