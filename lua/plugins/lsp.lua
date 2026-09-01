@@ -70,6 +70,19 @@ return {
 				vim.lsp.enable('ruff')
 			end
 
+            if vim.fn.executable('terraform-ls') == 1 then
+                vim.lsp.config('terraformls', {
+                    cmd = { 'terraform-ls', 'serve' },
+                    filetypes = { 'terraform' },
+                    -- Older Neovim builds do not expose codelens.enable yet.
+                    on_attach = function(_, bufnr)
+                        if vim.lsp.codelens and vim.lsp.codelens.enable then
+                            vim.lsp.codelens.enable(true, { bufnr = bufnr })
+                        end
+                    end,
+                })
+                vim.lsp.enable('terraformls')
+            end
             -- Typescript and Javascript Language server (using new vim.lsp.config API for Nvim 0.11+)
             if vim.fn.executable('typescript-language-server') == 1 then
                 vim.lsp.config('tsserver', {

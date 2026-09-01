@@ -3,20 +3,24 @@ return {
         'shaunsingh/nord.nvim'
     },
     {
+        "scottmckendry/cyberdream.nvim",
+        lazy = false,
+        priority = 1000,
+    },
+    {
         "vague-theme/vague.nvim",
     },
     { 
         "catppuccin/nvim", 
-        name = "catppuccin", 
         priority = 1000,
         config = function() 
-            vim.cmd("colorscheme vague")
+            vim.cmd("colorscheme habamax")
 	        vim.o.background = 'dark'
 	 		-- XXX: hi Normal ctermbg=NONE
 	 		-- Make comments more prominent -- they are important.
 	 		local bools = vim.api.nvim_get_hl(0, { name = 'Boolean'})
             -- Remove background (Not working in WSL)
-            -- vim.api.nvim_set_hl(0, "normal", { bg = "none" })
+            vim.api.nvim_set_hl(0, "normal", { bg = "none" })
             -- Uncomment if you want the floating window to be bg less
             -- vim.api.nvim_set_hl(0, "normalfloat", { bg = "none" })
 	 		-- Make it clearly visible which argument we're at.
