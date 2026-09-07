@@ -2,13 +2,50 @@ return {
     {
         "prisma/vim-prisma",
     },
+	{
+		"mason-org/mason-lspconfig.nvim",
+		opts = {
+			ensure_installed = { "lua_ls" },
+			automatic_enable = { "lua_ls" },
+		},
+		dependencies = {
+			{ "mason-org/mason.nvim", opts = {} },
+			"neovim/nvim-lspconfig",
+		},
+	},
 	-- LSP
 	{
 		'neovim/nvim-lspconfig',
 		config = function()
 			-- Setup language servers.
-            -- Deprecated
-			local lspconfig = require('lspconfig')
+
+			-- Lua LSP with Neovim runtime types and globals.
+			vim.lsp.config('lua_ls', {
+				on_init = function(client)
+					if client.workspace_folders then
+						local path = client.workspace_folders[1].name
+						local has_project_config = vim.uv.fs_stat(path .. '/.luarc.json')
+							or vim.uv.fs_stat(path .. '/.luarc.jsonc')
+
+						if path ~= vim.fn.stdpath('config') and has_project_config then
+							return
+						end
+					end
+
+					client.config.settings.Lua = vim.tbl_deep_extend(
+						'force',
+						client.config.settings.Lua or {},
+						{
+							runtime = { version = 'LuaJIT' },
+							workspace = {
+								checkThirdParty = false,
+								library = { vim.env.VIMRUNTIME },
+							},
+						}
+					)
+				end,
+				settings = { Lua = {} },
+			})
 
             -- Prisma formatting and LSP
             vim.lsp.config('prismals', {
@@ -208,7 +245,7 @@ return {
     -- prettier
     {
       "prettier/vim-prettier",
-      build = "yarn install global prettier",
+      build = "yarn add global prettier",
       ft = { "javascript", "typescript", "css", "scss", "html", "json", "markdown", "graphql", "vue", "yaml" },
       config = function()
         vim.g["prettier#autoformat"] = 1

@@ -1,6 +1,30 @@
 return { 
     {
+        "dgox16/oldworld.nvim"
+    },
+    {
+        "ramojus/mellifluous.nvim"
+    },
+    {
+        'ray-x/aurora',
+        init = function()
+            vim.g.aurora_italic = 1
+            vim.g.aurora_transparent = 1
+            vim.g.aurora_bold = 1
+        end,
+    },
+    {
         'shaunsingh/nord.nvim'
+    },
+    {
+        "savq/melange-nvim"
+    },
+    { 
+        "olivercederborg/poimandres.nvim"
+    },
+    {
+        'nyoom-engineering/oxocarbon.nvim',
+        build = false,
     },
     {
         "scottmckendry/cyberdream.nvim",
@@ -13,8 +37,8 @@ return {
     { 
         "catppuccin/nvim", 
         priority = 1000,
-        config = function() 
-            vim.cmd("colorscheme habamax")
+        config = function()
+            vim.cmd("colorscheme aurora")
 	        vim.o.background = 'dark'
 	 		-- XXX: hi Normal ctermbg=NONE
 	 		-- Make comments more prominent -- they are important.
