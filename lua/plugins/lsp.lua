@@ -46,6 +46,11 @@ return {
 				end,
 				settings = { Lua = {} },
 			})
+			vim.lsp.config('clangd', {
+				settings = {
+				},
+			})
+            vim.lsp.enable('clangd')
 
             -- Prisma formatting and LSP
             vim.lsp.config('prismals', {
