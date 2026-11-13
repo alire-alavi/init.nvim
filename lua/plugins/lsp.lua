@@ -167,7 +167,17 @@ return {
 					local opts = { buffer = ev.buf }
 					vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
 					vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-					vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+					-- Small bordered hover popup at the cursor instead of a
+					-- borderless float that stretches to the bottom of the screen.
+					local function hover()
+						vim.lsp.buf.hover({
+							border = 'rounded',
+							max_width = math.floor(vim.o.columns * 0.6),
+							max_height = math.floor(vim.o.lines * 0.4),
+						})
+					end
+					vim.keymap.set('n', 'K', hover, opts)
+					vim.keymap.set('n', '<leader>K', hover, opts)
 					vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
 					vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
 					vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts)
@@ -287,7 +297,9 @@ return {
 		"cuducos/yaml.nvim",
 		ft = { "yaml" },
 		dependencies = {
-			"nvim-treesitter/nvim-treesitter",
+			-- `master` is frozen and breaks on Nvim 0.12 (markdown injection
+			-- directive crash inside LSP hover floats); `main` supports 0.12.
+			{ "nvim-treesitter/nvim-treesitter", branch = "main" },
 		},
 	},
     -- javascript

@@ -172,3 +172,16 @@ require("lazy").setup({
     checker = { enabled = true },
 })
 
+-- lazy.nvim prefers <prefix>/lib64/nvim over <prefix>/lib/nvim. A stale
+-- lib64 dir from an older Neovim install ships parsers that don't match the
+-- current runtime queries (e.g. "Invalid field name" on Lua files), so
+-- prefer the lib dir that belongs to the running binary.
+do
+    local prefix = vim.fn.fnamemodify(vim.v.progpath, ":p:h:h")
+    local lib, lib64 = prefix .. "/lib/nvim", prefix .. "/lib64/nvim"
+    if vim.uv.fs_stat(lib .. "/parser") and vim.uv.fs_stat(lib64) then
+        vim.opt.rtp:remove(lib64)
+        vim.opt.rtp:append(lib)
+    end
+end
+
